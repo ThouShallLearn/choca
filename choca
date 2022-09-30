@@ -1,0 +1,98 @@
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V104.Profiler;
+using OpenQA.Selenium.Interactions;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace GetChumbaCode
+{
+    internal class Program
+    {
+        static string email;
+        static string password;
+        static int wait;
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter Email:");
+            email = Console.ReadLine();
+            Console.WriteLine("Enter Password:");
+            password = Console.ReadLine();
+            Console.WriteLine("Enter Delay In Minutes:");
+            wait = Int32.Parse(Console.ReadLine());
+            Start();
+        }
+        static IWebDriver driver;
+        static async void Start()
+        {
+            while (true)
+            {
+                await OpenDriver();
+                Thread.Sleep(TimeSpan.FromMinutes(wait));
+
+
+            }
+        }
+       static async Task OpenDriver()
+        {
+            var options = new ChromeOptions();
+            //options.AddArgument("--load-extension=" + "C:\\Captcha");
+
+            //options.AddArgument("--headless");
+            driver = new ChromeDriver("C:\\chromedriver", options);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Navigate().GoToUrl("https://www.chumbacasino.com/login");
+            driver.SwitchTo().DefaultContent();
+            
+            Login();
+
+        }
+
+        static async void Login()
+        {
+            driver.FindElement(By.XPath("/html/body/div[1]/header/div/div/a[2]")).Click();
+           
+            driver.FindElement(By.XPath("/html/body/div[1]/div[1]/div/div[2]/div/form/div[1]/input")).SendKeys("vynxcs@gmail.com");
+            driver.FindElement(By.XPath("/html/body/div[1]/div[1]/div/div[2]/div/form/div[2]/input")).SendKeys("ChayceBaileyOtis2004!");
+            try
+            {
+                driver.FindElement(By.XPath("/html/body/div[1]/div[1]/div/div[2]/div/form/button")).Click();
+
+            }
+            catch
+            {
+
+            }
+            try
+            {
+                //close first popup
+                driver.FindElement(By.XPath("/html/body/div[4]/div/div/div/button[2]")).Click();
+
+            }
+            catch { }
+            try
+            {
+                //close second popup
+                driver.FindElement(By.XPath("/html/body/div[4]/div/div/div/div[2]/span")).Click();
+
+            }
+            catch { }
+            //click get postal code
+            driver.FindElement(By.XPath("/html/body/div[1]/div/div/div[3]/footer/div/ul[1]/li[5]/button")).Click();
+            Thread.Sleep(5000);
+            //click get code
+            driver.FindElement(By.Id("get-postal-request-code")).Click();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
+            //put code in file
+            File.AppendAllText(@"c:\Users\happy\OneDrive\Desktop\herro\file", "text content" + Environment.NewLine);
+
+            string code = driver.FindElement(By.XPath("/html/body/div[1]/div/div/div/div/p[2]")).Text;
+            Console.WriteLine(code);
+
+            
+        }
+    }
+}
