@@ -39,12 +39,12 @@ namespace GetChumbaCode
        static async Task OpenDriver()
         {
             var options = new ChromeOptions();
-            //options.AddArgument("--load-extension=" + "C:\\Captcha");
+            options.AddArgument("--load-extension=" + "C:\\Captcha");
 
             //options.AddArgument("--headless");
             driver = new ChromeDriver("C:\\chromedriver", options);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            driver.Navigate().GoToUrl("https://www.chumbacasino.com/login");
+            driver.Navigate().GoToUrl("https://www.chumbacasino.com/");
             driver.SwitchTo().DefaultContent();
             
             Login();
@@ -86,13 +86,11 @@ namespace GetChumbaCode
             //click get code
             driver.FindElement(By.Id("get-postal-request-code")).Click();
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
-            //put code in file
-            File.AppendAllText(@"c:\Users\happy\OneDrive\Desktop\herro\file", "text content" + Environment.NewLine);
 
             string code = driver.FindElement(By.XPath("/html/body/div[1]/div/div/div/div/p[2]")).Text;
             Console.WriteLine(code);
 
-            
+
         }
     }
 }
